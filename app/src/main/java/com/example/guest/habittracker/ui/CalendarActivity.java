@@ -2,9 +2,11 @@ package com.example.guest.habittracker.ui;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseIntArray;
 
 import com.example.guest.habittracker.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +25,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static android.R.attr.start;
 
 public class CalendarActivity extends AppCompatActivity {
     private static final String TAG = CalendarActivity.class.getSimpleName();
@@ -66,36 +70,48 @@ public class CalendarActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                Map<Integer, Integer> motivations = new HashMap<>();
+                SparseIntArray motivations = new SparseIntArray();
                 Integer motivation = 0;
                 long frequency = dataSnapshot.getChildrenCount();
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     motivation = snapshot.child("motivationLevel").getValue(Integer.class);
-//                    if(motivations.containsKey(motivation)){
-//                        motivations.put(motivation, motivations.get(motivation)+1);
-//                    } else {
-//                        motivations.put(motivation, 1);
-//                    }
+                    int current = motivations.get(motivation-1);
+                    motivations.put((motivation-1), current+1);
+
                 }
+                int startMotivation = motivations.keyAt(0);
+                int endMotivation = motivations.keyAt(motivations.size()-1);
                 int dateColor;
+                int dateColor2;
                 if(frequency < 3){
-                    Log.d(TAG, "onChildAdded: low frequency");
-                    dateColor = lightColors[motivation-1];
+                    dateColor = lightColors[startMotivation];
+                    dateColor2 = lightColors[endMotivation];
                 } else if (frequency < 6){
-                    Log.d(TAG, "onChildAdded: mid frequency");
-                    dateColor = baseColors[motivation-1];
+                    dateColor = baseColors[startMotivation];
+                    dateColor2= baseColors[endMotivation];
                 } else {
-                    Log.d(TAG, "onChildAdded: high frequency");
-                    dateColor = darkColors[motivation-1];
+                    dateColor = darkColors[startMotivation];
+                    dateColor2 = darkColors[endMotivation];
                 }
-                ColorDrawable blueDrawable = new ColorDrawable(Color.parseColor("#0000FF"));
                 ColorDrawable dateDrawable;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                   dateDrawable = new ColorDrawable(getResources().getColor(dateColor, null));
+                GradientDrawable dateGradientDrawable;
+                if(dateColor == dateColor2) {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        dateDrawable = new ColorDrawable(getResources().getColor(dateColor, null));
+                    } else {
+                        dateDrawable = new ColorDrawable(getResources().getColor(dateColor));
+                    }
+                    mCaldroidFragment.setBackgroundDrawableForDate(dateDrawable, date);
                 } else {
-                   dateDrawable =  new ColorDrawable(getResources().getColor(dateColor));
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        int[] colors = {getResources().getColor(dateColor, null), getResources().getColor(dateColor2, null)};
+                        dateGradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
+                    } else {
+                        int[] colors = {getResources().getColor(dateColor), getResources().getColor(dateColor2)};
+                        dateGradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
+                    }
+                    mCaldroidFragment.setBackgroundDrawableForDate(dateGradientDrawable, date);
                 }
-                mCaldroidFragment.setBackgroundDrawableForDate(dateDrawable, date);
                 mCaldroidFragment.refreshView();
             }
 

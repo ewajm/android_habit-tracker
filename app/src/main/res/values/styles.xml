@@ -11,10 +11,35 @@
     <!-- Dark theme. -->
     <style name="CaldroidCustom" parent="CaldroidDefault">
         <item name="styleCaldroidViewLayout">@style/CaldroidCustomCalendarViewLayout</item>
+        <item name="styleCaldroidWeekdayView">@style/CaldroidCustomWeekdayView</item>
+        <item name="styleCaldroidNormalCell">@style/CaldroidCustomCell</item>
+        <item name="styleCaldroidSquareCell">@style/CaldroidCustomSquareCell</item>
+        <item name="styleCaldroidMonthName">@style/CaldroidCustomMonthName</item>
+        <item name="styleCaldroidGridView">@style/CaldroidCustomGridView</item>
     </style>
 
     <style name="CaldroidCustomCalendarViewLayout">
         <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="CaldroidCustomWeekdayView" parent="CaldroidDefaultWeekday">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="CaldroidCustomMonthName" parent="CaldroidDefaultMonthName">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="CaldroidCustomCell" parent="CaldroidDefaultCell">
+        <item name="android:background">@color/colorPrimaryLight</item>
+    </style>
+
+    <style name="CaldroidCustomSquareCell" parent="CaldroidDefaultSquareCell">
+        <item name="android:background">@color/colorPrimaryLight</item>
+    </style>
+
+    <style name="CaldroidCustomGridView" parent="CaldroidDefaultGridView">
+        <item name="android:background">@color/colorDivider</item>
     </style>
 
 </resources>
