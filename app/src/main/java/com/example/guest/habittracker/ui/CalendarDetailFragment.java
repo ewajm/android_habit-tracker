@@ -41,6 +41,7 @@ public class CalendarDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mDate = getArguments().getString("date");
         mUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
     }
 
     @Override

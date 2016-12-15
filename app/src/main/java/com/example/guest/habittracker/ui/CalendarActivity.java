@@ -58,12 +58,33 @@ public class CalendarActivity extends AppCompatActivity {
         mFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
 
         mCaldroidFragment = new CaldroidFragment();
-        Bundle args = new Bundle();
-        Calendar cal = Calendar.getInstance();
-        args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
-        args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
-        args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidCustom);
-        mCaldroidFragment.setArguments(args);
+    // If Activity is created after rotation
+        if (savedInstanceState != null) {
+            mCaldroidFragment.restoreStatesFromKey(savedInstanceState,
+                    "CALDROID_SAVED_STATE");
+        }
+
+    // If activity is created from fresh
+        else {
+            Bundle args = new Bundle();
+            Calendar cal = Calendar.getInstance();
+            args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+            args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+            args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
+            args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, false);
+            args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidCustom);
+            mCaldroidFragment.setArguments(args);
+
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            CalendarDetailFragment fragment = new CalendarDetailFragment();
+            Bundle detailArgs = new Bundle();
+            String today = mFormat.format(Calendar.getInstance().getTime());
+            detailArgs.putString("date", today);
+            fragment.setArguments(detailArgs);
+            fragmentTransaction.add(R.id.caldetail, fragment);
+            fragmentTransaction.commit();
+        }
 
         android.support.v4.app.FragmentTransaction t = getSupportFragmentManager().beginTransaction();
         t.replace(R.id.cal, mCaldroidFragment);
@@ -81,7 +102,6 @@ public class CalendarActivity extends AppCompatActivity {
                 newArgs.putString("date", chosenDate);
                 fragment.setArguments(newArgs);
                 fragmentTransaction.replace(R.id.caldetail, fragment);
-                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
 
@@ -89,17 +109,6 @@ public class CalendarActivity extends AppCompatActivity {
         mCaldroidFragment.setCaldroidListener(listener);
 
         populateDates();
-
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        CalendarDetailFragment fragment = new CalendarDetailFragment();
-        Bundle detailArgs = new Bundle();
-        String today = mFormat.format(Calendar.getInstance().getTime());
-        Log.d(TAG, "onCreate: " + today);
-        detailArgs.putString("date", today);
-        fragment.setArguments(detailArgs);
-        fragmentTransaction.add(R.id.caldetail, fragment);
-        fragmentTransaction.commit();
     }
 
     private void populateDates() {
@@ -179,6 +188,17 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // TODO Auto-generated method stub
+        super.onSaveInstanceState(outState);
+
+        if (mCaldroidFragment != null) {
+            mCaldroidFragment.saveStatesToKey(outState, "CALDROID_SAVED_STATE");
+        }
+
     }
 
     @Override
