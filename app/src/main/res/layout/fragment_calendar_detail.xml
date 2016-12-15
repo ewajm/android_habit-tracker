@@ -22,7 +22,9 @@
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/dateHeadingView"
         android:gravity="center"
+        android:text="No activities to display"
         android:textColor="@android:color/white"
         />
 
