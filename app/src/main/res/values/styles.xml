@@ -8,4 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Dark theme. -->
+    <style name="CaldroidCustom" parent="CaldroidDefault">
+        <item name="styleCaldroidViewLayout">@style/CaldroidCustomCalendarViewLayout</item>
+    </style>
+
+    <style name="CaldroidCustomCalendarViewLayout">
+        <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
 </resources>

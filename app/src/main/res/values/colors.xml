@@ -7,4 +7,16 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="colorDivider">#BDBDBD</color>
+    <color name="fine">#cddc39</color>
+    <color name="fineLight">#F1FC8B</color>
+    <color name="fineDark">#889606</color>
+    <color name="meh">#E07F3A</color>
+    <color name="mehLight">#FFBC8D</color>
+    <color name="mehDark">#994306</color>
+    <color name="dothings">#248D7F</color>
+    <color name="dothingsLight">#68BCB0</color>
+    <color name="dothingsDark">#046053</color>
+    <color name="parkour">#7F2A94</color>
+    <color name="parkourLight">#B16EC2</color>
+    <color name="parkourDark">#520765</color>
 </resources>
